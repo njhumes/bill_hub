@@ -1014,5 +1014,5 @@ const tempDataReps = [
         "image": "kirsten_gillibrand.jpg",}
 ]
     
-exports.tempData = tempData2;
+exports.tempData = tempData;
 exports.tempDataReps = tempDataReps;

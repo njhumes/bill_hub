@@ -68,7 +68,8 @@ class App extends Component {
       bills: [],
       trackedBills: [],
       trackedReps: [],
-      trendingBills: parsedData.tempData,
+      // trendingBills: parsedData.tempData,
+      trendingBills: [],
       reps: parsedData.tempDataReps
       }
   }
@@ -108,8 +109,8 @@ class App extends Component {
 //                             PULL INITIAL DATA FOR TRENDING AND BILL PAGES
 // ================================================================================================================  
   componentDidMount() {
-    //this.getTrendingBills();
-    //this.getBillsFromQuery();
+    // this.getTrendingBills();
+    // this.getBillsFromQuery();
   }
 // ================================================================================================================
 //                                  CHANGE QUERY STATE WHEN USER TYPES
@@ -164,18 +165,22 @@ class App extends Component {
 //                          ADD TO USER'S TRACKING LIST (MONGO AND REACT STATE)
 // ================================================================================================================
   addBillToTracking = async (billToTrack) => {
+    console.log('bill tracking function');
+    console.log(billToTrack);
     try {
       if (billToTrack._id) {
+        console.log('got to line 172')
 // ================================================
 // MONGO: ADD TO USER'S TRACKED BILLS (IF POSSIBLE)
 // ================================================
-        const isUserTracking = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/auth/${this.state._id}/track/${billToTrack._id}`, {
+        const isUserTracking = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/auth/track/${billToTrack._id}`, {
           method: 'PUT',
           credentials: 'include',
           headers: {
           'Content-Type': 'application/json'
         }});
         if(!isUserTracking.ok){
+          console.log('got to line 182')
           throw Error(isUserTracking.statusText)
         }
         const parsedIsUserTracking = await isUserTracking.json();
@@ -193,6 +198,7 @@ class App extends Component {
           'Content-Type': 'application/json'
           }
           });
+          console.log('got to line 200')
           if(!updateBill.ok){
               throw Error(updateBill.statusText)
           }
@@ -207,7 +213,7 @@ class App extends Component {
               updatedArray[i].trackingCount ++
             }
           }
-
+          console.log('got to line 215')
           this.setState({ 
             trackedBills: [...this.state.trackedBills, parsedUpdateBill.data],
             bills: updatedArray
@@ -223,6 +229,7 @@ class App extends Component {
 // IF NO ID, CREATE ONE IN MONGO (WE KNOW USER HASN'T TRACKED THEN)
 // ================================================================
       else {
+        console.log('got to line 231')
         const createBill = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/trending/`, {
         method: 'POST',
         body: JSON.stringify({
@@ -409,14 +416,15 @@ class App extends Component {
             body: JSON.stringify({
                 username: this.state.username,
                 password: this.state.password,
-                trackedBills: [],
-                trackedReps: []
+                // trackedBills: [],
+                // trackedReps: []
             }),
             credentials: 'include',
             headers: {
             'Content-Type': 'application/json'
             }
         });
+        console.log(loginResponse);
         if(!loginResponse.ok){
             console.log(`=== loginresponse ${loginResponse}`)
             throw Error(loginResponse.statusText)

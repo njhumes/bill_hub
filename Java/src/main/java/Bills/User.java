@@ -19,8 +19,15 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "bill_id")
     )
-    Set<Bill> trackedBills;
+    private Set<Bill> trackedBills;
 
+    public Set<Bill> getTrackedBills() {
+        return trackedBills;
+    }
+
+    public void setTrackedBills(Set<Bill> trackedBills) {
+        this.trackedBills = trackedBills;
+    }
 
     public String getUsername() {
         return username;

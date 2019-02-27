@@ -17,7 +17,7 @@ public class Bill {
     private Long lastAction;
 
     @ManyToMany(mappedBy = "trackedBills")
-    Set<User> tracks;
+    private Set<User> tracks;
 
     public Long getId() {
         return id;

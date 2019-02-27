@@ -10,8 +10,12 @@ public class BillController {
     @Autowired
     private BillRepository billRepository;
 
-    @GetMapping("/bills")
+    @GetMapping("/bills/findBill")
     public Iterable<Bill> billIndex() {
+        return billRepository.findAll();
+    }
+    @GetMapping("/trending")
+    public Iterable<Bill> trendingBills() {
         return billRepository.findAll();
     }
 
