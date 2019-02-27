@@ -1,6 +1,7 @@
 package Bills;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Bill {
@@ -15,7 +16,8 @@ public class Bill {
     private Long proposed;
     private Long lastAction;
 
-
+    @ManyToMany(mappedBy = "trackedBills")
+    Set<User> tracks;
 
     public Long getId() {
         return id;

@@ -1,9 +1,7 @@
 package Bills;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -14,6 +12,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToMany
+    @JoinTable(
+        name = "users_track_bills",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "bill_id")
+    )
+    Set<Bill> trackedBills;
+
 
     public String getUsername() {
         return username;
@@ -39,5 +46,5 @@ public class User {
         this.id = id;
     }
 
-    
+
 }
