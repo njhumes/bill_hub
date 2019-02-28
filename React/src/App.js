@@ -168,42 +168,45 @@ class App extends Component {
     console.log('bill tracking function');
     console.log(billToTrack);
     try {
-      if (billToTrack._id) {
+      if (billToTrack.id) {
         console.log('got to line 172')
 // ================================================
 // MONGO: ADD TO USER'S TRACKED BILLS (IF POSSIBLE)
 // ================================================
-        const isUserTracking = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/auth/track/${billToTrack._id}`, {
+        const isUserTracking = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/auth/track/${billToTrack.id}`, {
           method: 'PUT',
           credentials: 'include',
           headers: {
           'Content-Type': 'application/json'
         }});
+        console.log(isUserTracking, '~~~~~');
         if(!isUserTracking.ok){
           console.log('got to line 182')
           throw Error(isUserTracking.statusText)
         }
         const parsedIsUserTracking = await isUserTracking.json();
+        console.log(parsedIsUserTracking, '===+++===');
+        
 // ==========================================
 // UPDATE COUNT IN MONGO IF USER JUST TRACKED
 // ==========================================
-        if (parsedIsUserTracking.status == 200) {
-          const updateBill = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/trending/track/${billToTrack._id}`, {
-          method: 'PUT',
-          body: JSON.stringify({
-            increment: 1,
-          }),
-          credentials: 'include',
-          headers: {
-          'Content-Type': 'application/json'
-          }
-          });
-          console.log('got to line 200')
-          if(!updateBill.ok){
-              throw Error(updateBill.statusText)
-          }
-          const parsedUpdateBill = await updateBill.json();
-          console.log(`INCREMENTED BILL ID ${JSON.stringify(parsedUpdateBill.data._id)}`)
+        if (parsedIsUserTracking) {
+          // const updateBill = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/trending/track/${billToTrack._id}`, {
+          // method: 'PUT',
+          // body: JSON.stringify({
+          //   increment: 1,
+          // }),
+          // credentials: 'include',
+          // headers: {
+          // 'Content-Type': 'application/json'
+          // }
+          // });
+          // console.log('got to line 200')
+          // if(!updateBill.ok){
+          //     throw Error(updateBill.statusText)
+          // }
+          // const parsedUpdateBill = await updateBill.json();
+          // console.log(`INCREMENTED BILL ID ${JSON.stringify(parsedUpdateBill.data._id)}`)
 // ================================================
 // ADD TO TRACKEDBILLS IN REACT (BASED ON DB REPLY)
 // ================================================
@@ -215,12 +218,13 @@ class App extends Component {
           }
           console.log('got to line 215')
           this.setState({ 
-            trackedBills: [...this.state.trackedBills, parsedUpdateBill.data],
+            trackedBills: [...this.state.trackedBills, parsedIsUserTracking/*, parsedUpdateBill.data*/],
             bills: updatedArray
           }, function() {
-            console.log(`TRACKING BILL ${this.state.trackedBills[this.state.trackedBills.length-1]._id}`);
+            // console.log(`TRACKING BILL ${this.state.trackedBills[this.state.trackedBills.length-1]._id}`);
             this.getTrendingBills();
           });
+          console.log(this.state);
         } else {
           console.log(`ALREADY TRACKING BILL ${billToTrack._id}`)
         }
@@ -486,25 +490,6 @@ class App extends Component {
 // ====================================================================================================================
 // THIS SHOULD QUERY THE API WITH USER INPUT
 // ====================================================================================================================
-
-// getBillsFromBackend = async (e) => {
-//   e.preventDefault();
-//   try {
-//     const sqlResponse = await fetch(process.env.REACT_APP_BACKEND_ADDRESS + '/bill');
-//     console.log(sqlResponse, 'sqlResponse')
-//     const jsonSQL = await sqlResponse.json();
-//     console.log(jsonSQL, 'jsonSQL');
-//     this.setState({
-//       bills: jsonSQL.data
-//     })
-
-//   } catch(err){
-//       console.log(err)
-//   }
-// }
-
-
-
 getBillsFromQuery = async (e) => {
   e.preventDefault();
 

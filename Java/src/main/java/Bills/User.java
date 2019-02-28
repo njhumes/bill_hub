@@ -1,6 +1,9 @@
 package Bills;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.Optional;
 import java.util.Set;
 
 @Entity
@@ -19,14 +22,15 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "bill_id")
     )
-    private Set<Bill> trackedBills;
+
+    private Set<Bill> tracked_bills;
 
     public Set<Bill> getTrackedBills() {
-        return trackedBills;
+        return tracked_bills;
     }
 
-    public void setTrackedBills(Set<Bill> trackedBills) {
-        this.trackedBills = trackedBills;
+    public void setTrackedBills(Bill trackedBills) {
+        this.tracked_bills.add(trackedBills);
     }
 
     public String getUsername() {

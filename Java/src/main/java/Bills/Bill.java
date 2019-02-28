@@ -1,5 +1,7 @@
 package Bills;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -17,8 +19,17 @@ public class Bill {
     private String last_action;
     private String tracking_count;
 
-    @ManyToMany(mappedBy = "trackedBills")
-    private Set<User> tracks;
+    @ManyToMany(mappedBy = "tracked_bills")
+    @JsonIgnore
+    private Set<User> user;
+
+    public Set<User> getUser() {
+        return user;
+    }
+
+    public void setUser(Set<User> user) {
+        this.user = user;
+    }
 
     public int getId() {
         return id;
