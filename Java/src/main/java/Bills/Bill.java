@@ -8,22 +8,23 @@ public class Bill {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String title;
-    private Long summary;
+    private String summary;
     private String state;
-    private Long proposed;
-    private Long lastAction;
+    private String proposed;
+    private String last_action;
+    private String tracking_count;
 
     @ManyToMany(mappedBy = "trackedBills")
     private Set<User> tracks;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -35,11 +36,11 @@ public class Bill {
         this.title = title;
     }
 
-    public Long getSummary() {
+    public String getSummary() {
         return summary;
     }
 
-    public void setSummary(Long summary) {
+    public void setSummary(String summary) {
         this.summary = summary;
     }
 
@@ -51,30 +52,27 @@ public class Bill {
         this.state = state;
     }
 
-    public Long getProposed() {
+    public String getProposed() {
         return proposed;
     }
 
-    public void setProposed(Long proposed) {
+    public void setProposed(String proposed) {
         this.proposed = proposed;
     }
 
-    public Long getLastAction() {
-        return lastAction;
+    public String getLastAction() {
+        return last_action;
     }
 
-    public void setLastAction(Long lastAction) {
-        this.lastAction = lastAction;
+    public void setLastAction(String last_action) {
+        this.last_action = last_action;
     }
 
-    public int getTrackingCount() {
-        return trackingCount;
+    public String getTrackingCount() {
+        return tracking_count;
     }
 
-    public void setTrackingCount(int trackingCount) {
-        this.trackingCount = trackingCount;
+    public void setTrackingCount(String tracking_count) {
+        this.tracking_count = tracking_count;
     }
-
-    private int trackingCount;
-
 }

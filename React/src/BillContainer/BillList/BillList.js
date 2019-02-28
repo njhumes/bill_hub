@@ -2,12 +2,13 @@ import React from 'react'
 import BillItem from './BillItem/BillItem'
 
 const BillList = (props) => {
+    console.log(props.bills, 'props.bills')
     // MAP OVER DATA AND MAKE BILL ITEMS
     const billList = props.bills.map((bill,i) => {
         let isTracked = false;
         let imgSrc = "/animations/unclicked.gif";
-        for (let i=0; i<props.trackedBills.length; i++){
-            if (props.trackedBills[i]._id == bill._id) {
+        for (let i=0; i<props.bills.length; i++){
+            if (props.bills[i].id == bill.id) {
                 isTracked = true;
                 imgSrc = "/animations/clicked.gif";
             }

@@ -487,6 +487,24 @@ class App extends Component {
 // THIS SHOULD QUERY THE API WITH USER INPUT
 // ====================================================================================================================
 
+// getBillsFromBackend = async (e) => {
+//   e.preventDefault();
+//   try {
+//     const sqlResponse = await fetch(process.env.REACT_APP_BACKEND_ADDRESS + '/bill');
+//     console.log(sqlResponse, 'sqlResponse')
+//     const jsonSQL = await sqlResponse.json();
+//     console.log(jsonSQL, 'jsonSQL');
+//     this.setState({
+//       bills: jsonSQL.data
+//     })
+
+//   } catch(err){
+//       console.log(err)
+//   }
+// }
+
+
+
 getBillsFromQuery = async (e) => {
   e.preventDefault();
 
@@ -515,66 +533,69 @@ getBillsFromQuery = async (e) => {
     }
   }
 
-  let returnedBills = cleanedData.filter(checkQueryAndState)
-  let billTitleList = [];
-  let limit = 0;
-  if (returnedBills.length > 10) {
-    limit = 10;
-  } else {
-    limit = returnedBills.length;
-  }
-  for (let i=0; i<limit;i++){
-    billTitleList.push(returnedBills[i].title.slice(0,5) + "...")
-  }
-  console.log(`FIRST 10 BILLS FROM API QUERY: ${JSON.stringify(billTitleList)}`);
+  // let returnedBills = cleanedData.filter(checkQueryAndState)
+  // let billTitleList = [];
+  // let limit = 0;
+  // if (returnedBills.length > 10) {
+  //   limit = 10;
+  // } else {
+  //   limit = returnedBills.length;
+  // }
+  // for (let i=0; i<limit;i++){
+  //   billTitleList.push(returnedBills[i].title.slice(0,5) + "...")
+  // }
+  // console.log(`FIRST 10 BILLS FROM API QUERY: ${JSON.stringify(billTitleList)}`);
 // ===========================================================
 // LOOK FOR API BILLS IN MONGO TO PULL TRACKING INFO IF NEEDED
 // ===========================================================
-  for (let i=0; i<limit-1; i++) {
+  // for (let i=0; i<limit-1; i++) {
 
       try {
         const findBill = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/bills/findBill`, {
             method: 'GET',
-            body: JSON.stringify({
-                title: returnedBills[i].title,
-            }),
+            body: JSON.stringify(),
             credentials: 'include',
             headers: {
             'Content-Type': 'application/json'
             }
         });
+        console.log(findBill, 'findBill');
 
         if(!findBill.ok){
             throw Error(findBill.statusText)
         }
 
         const parsedResponse = await findBill.json();
-        if (parsedResponse.status == 200) {
-          returnedBills[i] = parsedResponse.data;
-        }
-        console.log('FOUND BILL FROM EXPRESS TO GRAB INFO FOR:', parsedResponse);
+        console.log(parsedResponse, 'parsedResponse');
+        this.setState({
+          bills: parsedResponse
+        })
+        // if (parsedResponse.status == 200) {
+        //   returnedBills[i] = parsedResponse.data;
+        // }
+
       } catch(err){
         console.log(err)
       }
-  }
+  // }
   
-  let billTitles = [];
-  for (let i=0; i<limit;i++){
-    billTitles.push(returnedBills[i].title.slice(0,5) + "...");
-  }
-  console.log(`BILLS FROM QUERY: ${JSON.stringify(billTitles)}`);
+  // let billTitles = [];
+  // for (let i=0; i<limit;i++){
+  //   billTitles.push(returnedBills[i].title.slice(0,5) + "...");
+  // }
+  // console.log(`BILLS FROM QUERY: ${JSON.stringify(billTitles)}`);
 // ====================
 // NOW UPDATE THE STATE
 // ====================
-  this.setState({
-    bills: returnedBills.slice(0,limit)
-  }, function() {
-    let billTitles=[];
-    for (let i=0;i<limit;i++){
-      billTitles.push(returnedBills[i].title.slice(0,5) + "...")
-    }
-    console.log(`BILLS IN STATE W/ TRACKING COUNTS: ${billTitles}`)
-  })
+  // this.setState({
+  //   bills: returnedBills.slice(0,limit)
+  // }, function() {
+  //   let billTitles=[];
+  //   for (let i=0;i<limit;i++){
+  //     billTitles.push(returnedBills[i].title.slice(0,5) + "...")
+  //   }
+  //   console.log(`BILLS IN STATE W/ TRACKING COUNTS: ${billTitles}`)
+  // })
 }
 // =============================================================================================================
 //                                  UPDATE WHEN USER SELECTS A STATE TO QUERY
@@ -626,6 +647,7 @@ changeState = (e) => {
           <Col xs={{size: 'auto'}}>
             <SearchBar 
               getBillsFromQuery={this.getBillsFromQuery} 
+              getBillsFromBackend={this.getBillsFromBackend}
               onRadioBtnClick={this.onRadioBtnClick} 
               selected={this.state.queryBtn} 
               handleInput={this.handleInput}
@@ -672,7 +694,7 @@ changeState = (e) => {
               (<TrendingContainer {...routeProps} 
                 untrackBill={this.untrackBill} 
                 addBillToTracking={this.addBillToTracking} 
-                bills={this.state.trendingBills} 
+                bills={this.state.bills} 
                 updateTrending={this.updateTrending} 
                 trackedBills={this.state.trackedBills}
                 logged={this.state.logged} />)}

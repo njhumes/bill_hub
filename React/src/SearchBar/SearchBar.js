@@ -80,6 +80,7 @@ const SearchBar = (props) => {
                 {/* SEARCH BAR */}
                 <Col xs={{size: 'auto'}}>
                     <Form onSubmit={props.getBillsFromQuery.bind(this)}>
+                    {/* <Form onSubmit={props.getBillsFromBackend.bind(this)}> */}
                         <InputGroup>
                             <Input placeholder="username" onChange={props.handleInput.bind(this)} />
                         </InputGroup>
