@@ -22,7 +22,8 @@ export class BillItem extends Component {
             alert("You need to log in to follow bills!")
         }
     }
-    untrackBill(billId){
+    untraceBill(billId){
+        console.log('%%%%%%% untrackBil in billitem.js')
         if (this.props.logged){
             this.setState({
                 trackedStatus: false,
@@ -47,7 +48,7 @@ export class BillItem extends Component {
                                 <img onClick={
                                     !this.state.trackedStatus ? 
                                     this.addBillToTracking.bind(this,this.props.billInfo) :
-                                    this.untrackBill.bind(this,this.props.billInfo._id)
+                                    this.untraceBill.bind(this,this.props.billInfo.id)
                                 } 
                                 className="starIcon" src={this.state.imgSrc}/> 
                             </figure>

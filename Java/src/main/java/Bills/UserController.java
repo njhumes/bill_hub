@@ -67,21 +67,25 @@ public class UserController {
         } catch(Exception err){
             throw new Exception(err.getMessage());
         }
+    }
+    @PutMapping("auth/untrack/{id}")
+    public Bill unTrackBills(@PathVariable Integer id, HttpSession session) throws Exception {
+        try{
+            System.out.println("!!!!!!!!!");
+            User userLoggedIn = userService.findUserByUsername(session.getAttribute("username").toString());
+            Optional<Bill> billUntracked = billRepository.findById(id);
+            System.out.println("&&&&&&&&&&");
+            System.out.println(billUntracked);
+            System.out.println(userLoggedIn);
+            userLoggedIn.setTrackedBills(billUntracked.get());
+            userRepository.save(userLoggedIn);
+            return billUntracked.get();
 
+        } catch(Exception err){
+            throw new Exception(err.getMessage());
+        }
     }
 
 }
-//
-//    @PostMapping("/user/trail/{trail_id}")
-//    public Trail addTrailToFavorites(@PathVariable Long trail_id, HttpSession session) throws Exception{
-//        try{
-//            User foundUser = userService.findUserByUsername(session.getAttribute("username").toString());
-//            Optional<Trail> foundTrail = trailRepository.findById(trail_id);
-//            foundUser.setFavoriteTrails(foundTrail.get());
-//            userRepository.save(foundUser);
-//            return foundTrail.get();
-//        }catch(Exception err){
-//            throw new Exception(err.getMessage());
-//        }
-//    }
+
 

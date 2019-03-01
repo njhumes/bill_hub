@@ -11,7 +11,7 @@ const TrackingContainer = (props) => {
             <Card body key={bill._id}>
                 <CardTitle><h4>{bill.title}</h4></CardTitle>
                 <CardText>{bill.summary}</CardText>
-                <Button onClick={props.untrackBill.bind(this,bill._id)}>UnTrack</Button>
+                <Button onClick={props.untrackBill.bind(this,bill.id)}>UnTrack</Button>
             </Card>
         )
     })

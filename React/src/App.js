@@ -293,29 +293,32 @@ class App extends Component {
 // UNTRACK BILL
 // ==================================================================
   untrackBill = async (billId) => {
+    console.log('@@@@@@@@ untrackBill from app.js');
     try {
+      console.log(billId);
+      console.log(billId.id);
 // ==================================================================
 // DECREMENT IN MONGO DATABASE
 // ==================================================================
-      const updateBill = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/trending/untrack/${billId}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-            increment: -1,
-        }),
-        credentials: 'include',
-        headers: {
-        'Content-Type': 'application/json'
-        }
-      });
-      if(!updateBill.ok){
-        throw Error(updateBill.statusText)
-      }
-      const parsedUpdateBill = await updateBill.json();
-      console.log(`Updated bill response from Express API:${parsedUpdateBill}`)
+      // const updateBill = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/trending/untrack/${billId}`, {
+      //   method: 'PUT',
+      //   body: JSON.stringify({
+      //       increment: -1,
+      //   }),
+      //   credentials: 'include',
+      //   headers: {
+      //   'Content-Type': 'application/json'
+      //   }
+      // });
+      // if(!updateBill.ok){
+      //   throw Error(updateBill.statusText)
+      // }
+      // const parsedUpdateBill = await updateBill.json();
+      // console.log(`Updated bill response from Express API:${parsedUpdateBill}`)
 // ==================================================================
 // REMOVE FROM USER'S TRACKED BILLS
 // ==================================================================
-      const userUntrackBill = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/auth/${this.state._id}/untrack/${billId}`, {
+      const userUntrackBill = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/auth/untrack/${billId}`, {
         method: 'PUT',
         credentials: 'include',
         headers: {
@@ -325,21 +328,22 @@ class App extends Component {
       if(!userUntrackBill.ok){
         throw Error(userUntrackBill.statusText)
       }
+      console.log(userUntrackBill, 'userUntrackBill');
       const parsedUntrackBill = await userUntrackBill.json();
-      console.log(`UNTRACKED BILL ${JSON.stringify(parsedUntrackBill.data._id)}`)
+      console.log(parsedUntrackBill, 'parsedUntrackBill');
 // ==================================================================
 // REMOVE FROM TRACKEDBILLS IN REACT, IF SUCCESSFUL MONGO DELETION
 // ==================================================================
-      if (parsedUntrackBill.status == 200) {
+      if (parsedUntrackBill.ok) {
         let billIds = [];
         for (let i=0; i<this.state.trackedBills; i++){
-          billIds.push(this.state.trackedBills[i]._id)
+          billIds.push(this.state.trackedBills[i].id)
         }
         console.log(`TRACKED BILLS: ${JSON.stringify(billIds)}`)
 
         let arr = [];
         this.state.trackedBills.forEach((bill) => {
-          if (bill._id !== billId){
+          if (bill.id !== billId){
             arr.push(bill);
           }
         })
@@ -357,7 +361,7 @@ class App extends Component {
         }, function() {
           let billIds = [];
           for (let i=0; i<this.state.trackedBills; i++){
-            billIds.push(this.state.trackedBills[i]._id)
+            billIds.push(this.state.trackedBills[i].id)
           }
           console.log(`UNTRACKED BILL ${billId} TRACKED BILLS: ${billIds}.`);
           this.getTrendingBills();
