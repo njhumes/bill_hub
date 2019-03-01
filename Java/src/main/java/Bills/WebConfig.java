@@ -15,7 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
-                        "http://localhost:3000")
+                        "https://billhub-react.herokuapp.com/")
                 .allowedMethods("PUT", "DELETE", "OPTIONS", "GET", "POST", "HEAD")
                 .allowedHeaders("*")
                 .allowCredentials(true);
