@@ -334,7 +334,7 @@ class App extends Component {
 // ==================================================================
 // REMOVE FROM TRACKEDBILLS IN REACT, IF SUCCESSFUL MONGO DELETION
 // ==================================================================
-      if (parsedUntrackBill.ok) {
+      if (userUntrackBill.ok) {
         let billIds = [];
         for (let i=0; i<this.state.trackedBills; i++){
           billIds.push(this.state.trackedBills[i].id)
