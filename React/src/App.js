@@ -381,14 +381,15 @@ class App extends Component {
   }
   handleRegister = async (e) => {
     e.preventDefault();
+    console.log('register test');
     try {
         const loginResponse = await fetch(`${process.env.REACT_APP_BACKEND_ADDRESS}/auth/register`, {
             method: 'POST',
             body: JSON.stringify({
                 username: this.state.username,
                 password: this.state.password,
-                trackedBills: [],
-                trackedReps: []
+                // trackedBills: [],
+                // trackedReps: []
             }),
             credentials: 'include',
             headers: {
@@ -442,7 +443,7 @@ class App extends Component {
         console.log('JSON RESPONSE FROM Backend', parsedResponse);
         // const jsonString = parsedResponse;
         const id = parsedResponse.id
-        const tracked = parsedResponse.tracked_bills;
+        const tracked = parsedResponse.trackedBills;
         console.log('THIS IS THE ID', id);
         if (parsedResponse){
           this.loginSuccess(id, tracked);

@@ -21,14 +21,14 @@ public class Bill {
 
     @ManyToMany(mappedBy = "tracked_bills")
     @JsonIgnore
-    private Set<User> user;
+    private Set<Users> users;
 
-    public Set<User> getUser() {
-        return user;
+    public Set<Users> getUsers() {
+        return users;
     }
 
-    public void setUser(Set<User> user) {
-        this.user = user;
+    public void setUsers(Set<Users> users) {
+        this.users = users;
     }
 
     public int getId() {

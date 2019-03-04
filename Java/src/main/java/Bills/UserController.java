@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
-import java.util.Set;
 
 @RestController
 public class UserController {
@@ -21,31 +20,31 @@ public class UserController {
     private BillRepository billRepository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private User user;
+    private Users users;
     private HttpSession session;
 
     @PostMapping("/auth/register")
-    public User register(@RequestBody User user, HttpSession session) throws Exception {
+    public Users register(@RequestBody Users users, HttpSession session) throws Exception {
         try {
-            User newUser = userService.saveUser(user);
-            session.setAttribute("username", newUser.getUsername());
-            return newUser;
+            Users newUsers = userService.saveUser(users);
+            session.setAttribute("username", newUsers.getUsername());
+            return newUsers;
         } catch (Exception err) {
             throw new Exception(err.getMessage());
         }
     }
 
     @PostMapping("/auth/login")
-    public User login(@RequestBody User user, HttpSession session) throws Exception {
-        this.user = user;
+    public Users login(@RequestBody Users users, HttpSession session) throws Exception {
+        this.users = users;
         this.session = session;
         bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        User userLoggingIn = userRepository.findByUsername(user.getUsername());
-        boolean validLogin = bCryptPasswordEncoder.matches(user.getPassword(), userLoggingIn.getPassword());
+        Users usersLoggingIn = userRepository.findByUsername(users.getUsername());
+        boolean validLogin = bCryptPasswordEncoder.matches(users.getPassword(), usersLoggingIn.getPassword());
         if (validLogin) {
-            session.setAttribute("username", userLoggingIn.getUsername());
+            session.setAttribute("username", usersLoggingIn.getUsername());
             System.out.println("is this working????");
-            return userLoggingIn;
+            return usersLoggingIn;
         } else {
             System.out.println("not logging in");
             throw new Exception("invalid credentials");
@@ -55,13 +54,13 @@ public class UserController {
     @PutMapping("auth/track/{id}")
     public Bill trackBills(@PathVariable Integer id, HttpSession session) throws Exception {
         try{
-            User userLoggedIn = userService.findUserByUsername(session.getAttribute("username").toString());
+            Users usersLoggedIn = userService.findUserByUsername(session.getAttribute("username").toString());
             Optional<Bill> billChosen = billRepository.findById(id);
             System.out.println("===========");
             System.out.println(billChosen);
-            System.out.println(userLoggedIn);
-            userLoggedIn.setTrackedBills(billChosen.get());
-            userRepository.save(userLoggedIn);
+            System.out.println(usersLoggedIn);
+            usersLoggedIn.setTrackedBills(billChosen.get());
+            userRepository.save(usersLoggedIn);
             return billChosen.get();
 
         } catch(Exception err){
@@ -72,13 +71,13 @@ public class UserController {
     public Bill unTrackBills(@PathVariable Integer id, HttpSession session) throws Exception {
         try{
             System.out.println("!!!!!!!!!");
-            User userLoggedIn = userService.findUserByUsername(session.getAttribute("username").toString());
+            Users usersLoggedIn = userService.findUserByUsername(session.getAttribute("username").toString());
             Optional<Bill> billUntracked = billRepository.findById(id);
             System.out.println("&&&&&&&&&&");
             System.out.println(billUntracked);
-            System.out.println(userLoggedIn);
-            userLoggedIn.setTrackedBills(billUntracked.get());
-            userRepository.save(userLoggedIn);
+            System.out.println(usersLoggedIn);
+            usersLoggedIn.setTrackedBills(billUntracked.get());
+            userRepository.save(usersLoggedIn);
             return billUntracked.get();
 
         } catch(Exception err){

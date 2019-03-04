@@ -17,14 +17,14 @@ public class UserService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public User findUserByUsername(String username) {
+    public Users findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
-    public User saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-        return user;
+    public Users saveUser(Users users) {
+        users.setPassword(bCryptPasswordEncoder.encode(users.getPassword()));
+        userRepository.save(users);
+        return users;
     }
 
 }
